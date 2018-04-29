@@ -10,6 +10,7 @@ var counter = 0;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
+var lineLength = 5;
 var minMaxAngle = 75;
 var stepTolerance = 200;
 
@@ -65,14 +66,14 @@ function addToPath(startX, startY, endX, endY, complete = false){
   // Angle limitation depending on depth
   angle = getRandomInt(-minMaxAngle * (1 - (counter / stepTolerance)), minMaxAngle * (1 - (counter / stepTolerance)));
 
-  newX = startX + 15 * Math.cos(startRadian + degreeToRadian(angle));
-  newY = startY + 15 * Math.sin(startRadian + degreeToRadian(angle));
+  newX = startX + lineLength * Math.cos(startRadian + degreeToRadian(angle));
+  newY = startY + lineLength * Math.sin(startRadian + degreeToRadian(angle));
 
   ctx.lineTo(newX, newY);
 
   counter = counter + 1;
 
-  if(complete == false && getDistance(newX, newY, endX, endY) > 15){
+  if(complete == false && getDistance(newX, newY, endX, endY) > lineLength){
     addToPath(newX, newY, endX, endY);
   }
   else{
