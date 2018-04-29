@@ -1,3 +1,8 @@
+/*
+* Don't judge, let's all be friends.
+* Still don't quite have all details fleshed out.
+*/
+
 var guides = [];
 
 // Counter is used to target the endpoint more aggressively over time
@@ -147,9 +152,18 @@ $("#canvas").click(event, function(event){
 
   if(toolSelected == toolAddGuide){
     if(tempGuide.length < 1){
+      ctx.fillStyle = 'yellow';
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
+      ctx.fill();
+
       ctx.strokeStyle = 'blue';
       ctx.beginPath();
       ctx.moveTo(mouseX, mouseY);
+    }
+    else if(tempGuide.length > 2 && getDistance(mouseX, mouseY, tempGuide[0].x, tempGuide[0].y) < 5){
+      completeGuideline();
+      return;
     }
     else{
       ctx.lineTo(mouseX, mouseY);
@@ -164,15 +178,19 @@ $("#canvas").click(event, function(event){
 $(document).keydown(function(event){
   code = event.keyCode || event.which;
   if(code == 13){
-    if(tempGuide.length > 2){
-      guides.push(tempGuide);
-      ctx.closePath();
-      ctx.stroke();
-      tempGuide = [];
-      document.getElementById('guideExport').value = JSON.stringify(guides);
-    }
-    else{
-      alert("Add atleast 3 points or press Escape to cancel.")
-    }
+    completeGuideline();
   }
 });
+
+function completeGuideline(){
+  if(tempGuide.length > 2){
+    guides.push(tempGuide);
+    ctx.closePath();
+    ctx.stroke();
+    tempGuide = [];
+    document.getElementById('guideExport').value = JSON.stringify(guides);
+  }
+  else{
+    alert("Add atleast 3 points or press Escape to cancel.")
+  }
+}
